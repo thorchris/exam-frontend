@@ -1,7 +1,7 @@
 import SERVER_URL from "../util/Settings";
 
-function getJokes() {
-  return fetch(SERVER_URL + "/api/jokes")
+function getBooks() {
+  return fetch(SERVER_URL + "/api/books")
     .then(handleHttpErrors)
     .catch((err) => {
       if (err.status) {
@@ -12,21 +12,43 @@ function getJokes() {
     });
 }
 
-function getQuote() {
-  return fetch(SERVER_URL + "/api/quotes")
-    .then(handleHttpErrors)
-    .catch((err) => {
-      if (err.status) {
-        err.fullError.then((e) => console.log(e.message));
-      } else {
-        console.log("Network error");
-      }
-    });
+
+function addBook (isbn, title, author, publisher, publishYear){
+  const options = makeOptions("POST", {
+    isbn: isbn,
+    title: title,
+    author: author, 
+    publisher: publisher,
+    publishYear: publishYear
+  });
+  return fetch(SERVER_URL+ "/api/books/add" ,options)
+  .then(handleHttpErrors)
+  .catch((err) => {
+    if (err.status) {
+      err.fullError.then((e) => console.log(e.message));
+    } else {
+      console.log("Network error");
+    }
+  });
+}
+
+function deleteBook(id){
+  const options = makeOptions("DELETE")
+  return fetch(SERVER_URL + "/api/books/" + id, options)
+  .then(handleHttpErrors)
+  .catch((err) => {
+    if (err.status) {
+      err.fullError.then((e) => console.log(e.message));
+    } else {
+      console.log("Network error");
+    }
+  });
 }
 
 const apiFacade = {
-  getJokes,
-  getQuote,
+  getBooks,
+  addBook,
+  deleteBook,
 };
 
 function makeOptions(method, body) {

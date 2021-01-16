@@ -1,6 +1,9 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import React, { useState, useEffect } from "react";
+import { ThemeProvider } from 'styled-components';
+import { theme } from './theme';
+import { GlobalStyles } from './global';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,12 +12,15 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import Home from "./pages/Home";
-import ApiCalls from "./pages/ApiCalls";
+import Books from "./pages/Books";
 import NoMatch from "./components/NoMatch";
-import SecurePage from "./pages/SecurePage";
+import Admin from "./pages/Admin";
+import Loans from "./pages/Loans";
 import facade from "./api/userFacade";
 import { LogIn, LoggedIn } from "./pages/Login";
 import jwt_decode from "jwt-decode";
+import Sidemenu from "./components/Sidemenu/Sidemenu"
+import "./components/Sidemenu/sidemenu.css"
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -42,7 +48,7 @@ function App() {
       <Route
         {...rest}
         render={() => {
-          return loggedIn === true && user.roles === "admin,user" ? (
+          return loggedIn === true && user.roles === "admin" || user.roles ==="admin,user" ? (
             children
           ) : (
             <Redirect to="/login-out" />
@@ -54,21 +60,27 @@ function App() {
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
+        <>
+      <GlobalStyles />
       <Router>
-        <Navbar
-          loginMsg={loggedIn ? "Logout" : "Login"}
-          isLoggedIn={loggedIn}
-          user={user}
-        />
+      <Sidemenu
+              loginMsg={loggedIn ? "Logout" : "Login"}
+              isLoggedIn={loggedIn}
+              user={user}
+            />
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
-          <Route exact path="/api-calls">
-            <ApiCalls isLoggedIn={loggedIn} />
+          <Route exact path="/books">
+            <Books isLoggedIn={loggedIn} />
           </Route>
-          <PrivateRoute path="/secure-page">
-            <SecurePage />
+          <Route exact path="/loans">
+            <Loans />
+          </Route>
+          <PrivateRoute path="/admin">
+            <Admin />
           </PrivateRoute>
           <Route path="/login-out">
             {!loggedIn ? (
@@ -93,6 +105,8 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </>
+      </ThemeProvider>
     </div>
   );
 }

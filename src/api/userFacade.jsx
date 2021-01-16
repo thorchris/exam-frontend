@@ -8,7 +8,6 @@ function handleHttpErrors(res) {
 }
 
 function userFacade() {
-  /* Insert utility-methods from a latter step (d) here (REMEMBER to uncomment in the returned object when you do)*/
 
   const setToken = (token) => {
     localStorage.setItem("jwtToken", token);

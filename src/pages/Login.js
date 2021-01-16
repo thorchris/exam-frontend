@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import facade from "../api/userFacade";
 import CreateModal from "../components/RegisterUser";
+import Vamada from "../images/logo.png";
 
 export function LogIn({ login }) {
   const init = { username: "", password: "" };
@@ -20,6 +21,7 @@ export function LogIn({ login }) {
 
   return (
     <div className="container-fluid padding">
+      <img className="logo" src={Vamada} alt=""></img>
       <div className="row">
         <div className="col-3"></div>
         <div className="col-6 text-center">
